@@ -13,7 +13,6 @@ Category::Category(std::string name)
 Category::Category(const Category & mdd)
 	: AbsCatalogComponent(mdd.m_name)
 {
-	// À compléter pour copier tous les éléments du catalogue contenus dans la catégorie
 	for (CatalogComponentIterator_const component = Category::cbegin();
 		component != Category::cend();
 		component++) 
@@ -24,8 +23,8 @@ Category::Category(const Category & mdd)
 
 Category * Category::clone(void) const
 {
-	// À compléter pour construire un nouvel objet Category en appelant le constructeur de copie
-	return nullptr; // À remplacer
+	Category* clone = new Category(*this);
+	return clone;
 }
 
 AbsCatalogComponent& Category::addCatalogComponent(const AbsCatalogComponent & member)
