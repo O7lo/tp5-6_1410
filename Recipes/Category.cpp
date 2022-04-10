@@ -23,17 +23,15 @@ Category::Category(const Category & mdd)
 
 Category * Category::clone(void) const
 {
-	Category* clone = new Category(*this);
-	return clone;
+	Category* cloneCategory = new Category(*this);
+	return cloneCategory;
 }
 
 AbsCatalogComponent& Category::addCatalogComponent(const AbsCatalogComponent & member)
 {
-	// À compléter pour construire par clonage une copie de l'objet reçu en paramètre
-	// et l'insérer dans le conteneur de produits. On retourne une référence à l'objet
-	// qui vient d'être inséré dans le conteneur.
-
-	return *this; // À remplacer 
+	std::unique_ptr<AbsCatalogComponent> cloneComponent (member.clone());
+	m_products.push_back(move(cloneComponent));
+	return *m_products.back();
 }
 
 CatalogComponentIterator Category::begin()
