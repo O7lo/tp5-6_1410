@@ -14,6 +14,12 @@ Category::Category(const Category & mdd)
 	: AbsCatalogComponent(mdd.m_name)
 {
 	// À compléter pour copier tous les éléments du catalogue contenus dans la catégorie
+	for (CatalogComponentIterator_const component = Category::cbegin();
+		component != Category::cend();
+		component++) 
+	{
+		addCatalogComponent(*component);
+	}
 }
 
 Category * Category::clone(void) const
