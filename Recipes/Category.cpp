@@ -13,9 +13,7 @@ Category::Category(std::string name)
 Category::Category(const Category & mdd)
 	: AbsCatalogComponent(mdd.m_name)
 {
-	for (CatalogComponentIterator_const component = Category::cbegin();
-		component != Category::cend();
-		component++) 
+	for (auto component = mdd.cbegin(); component != mdd.cend(); component++) 
 	{
 		addCatalogComponent(*component);
 	}
