@@ -56,21 +56,23 @@ CatalogComponentIterator Category::end()
 
 void Category::deleteCatalogComponent(CatalogComponentIterator_const child)
 {
-	// À compléter pour éliminer de la catégorie l'élément auquel réfère l'itérateur
+	m_products.erase(child);
 }
 
 void Category::deleteAllComponents(void)
 {
-	// À compléter pour éliminer tous les éléments de la catégorie
+	m_products.clear();
 }
 
 const AbsProduct* Category::findProduct(std::string productName) const
 {
-	// À compléter pour itérer sur les éléments contenus dans la catégorie à la recherche d'un produit
+	// itérer sur les éléments contenus dans la catégorie à la recherche d'un produit
 	// portant le nom reçu en argument. Si aucun produit n'est trouvé on retourne nullptr
 	const AbsProduct* foundProduct = nullptr;
 
-	// À compléter
+	for (auto it = m_products.cbegin(); it != m_products.cend(); it++) {
+		foundProduct = (*it)->findProduct(productName);
+	}
 
 	return foundProduct;
 }
@@ -78,6 +80,13 @@ const AbsProduct* Category::findProduct(std::string productName) const
 std::ostream & Category::printToStream(std::ostream & o) const
 {
 	// À compléter pour imprimer sur un stream une catégorie et ses produits
+	o << "Category: " << getName() << std::endl;
+	m_indent++;
+	for (auto it = m_products.cbegin(); it != m_products.cend(); it++) {
+		indent(o);
+		o << *it << std::endl;
+	}
+	m_indent--;
 	return o;
 }
 
