@@ -9,8 +9,7 @@ UnitProduct::UnitProduct(std::string name, std::string origin, int quantity, flo
 
 AbsCatalogComponent * UnitProduct::clone(void) const 
 { 
-	// À compléter pour construire un nouvel objet UnitProduct en appelant le constructeur de copie
-	return nullptr; // À remplacer
+	return new UnitProduct(*this);
 }
 
 void UnitProduct::setQuantityPrice(int quantity, float price)
@@ -31,6 +30,7 @@ int UnitProduct::getQuantity() const
 
 std::ostream & UnitProduct::printToStream(std::ostream & o) const
 {
-	// À compléter pour imprimer sur un stream un produit vendu à l'unité
+	o << m_name << "(from " << this->getOrigin() << ") " << m_price
+		<< "/pc." << std::endl;
 	return o;
 }
