@@ -15,13 +15,15 @@ CompositeStep::CompositeStep(std::string title)
 CompositeStep::CompositeStep(const CompositeStep& mdd)
 	: AbsStep(mdd)
 {
-	// À compléter pour copier toutes les sous-étapes contenues dans l'étape
+	for (auto component = mdd.cbegin(); component != mdd.cend(); component++)
+	{
+		addRecipeComponent(*component);
+	}
 }
 
 CompositeStep* CompositeStep::clone() const
 {
-	// À compléter pour construire un nouvel objet CompositeStep en appelant le constructeur de copie
-	return nullptr; // À remplacer
+	return new CompositeStep(*this);
 }
 
 RecipeComponentIterator CompositeStep::begin() {
@@ -54,31 +56,39 @@ AbsRecipeComponent& CompositeStep::addRecipeComponent(const AbsRecipeComponent& 
 
 AbsRecipeComponent& CompositeStep::addRecipeComponent(const AbsStep& member)
 {
-	// À compléter pour construire par clonage une copie de l'objet reçu en paramètre
-	// et l'insérer dans le conteneur des étapes. On retourne une référence à l'objet
-	// qui vient d'être inséré dans le conteneur.
-
-	return *this; // À remplacer 
+	m_stepsContainer.push_back(std::unique_ptr<AbsRecipeComponent> (member.clone()));
+	return *m_stepsContainer.back();
 }
 
 void CompositeStep::deleteRecipeComponent(RecipeComponentIterator_const child)
 {
-	// À compléter pour éliminer des étapes l'élément auquel réfère l'itérateur
+	m_stepsContainer.erase(child);
 }
 
 void CompositeStep::deleteAllComponents(void)
 {
-	// À compléter pour éliminer tous les éléments de l'étape
+	m_stepsContainer.clear();
 }
 
 int CompositeStep::getDuration() const
 {
-	// À compléter pour calculer le temps total en sommant la durée de toutes les sous-étapes
-	return 0; // À remplacer
+	int duration = m_duration;
+	for (auto it = m_stepsContainer.cbegin(); it != m_stepsContainer.cend(); it++) {
+		duration += (*it)->getDuration();
+	}
+	return duration;
 }
 
 std::ostream& CompositeStep::printToStream(std::ostream& o) const 
 {
-	// À compléter pour imprimer sur un stream une étape et ses sous-étapes
+	o << "Category: " << getDescription << std::endl;
+	m_indent++;
+	int stepNb = 1;
+	for (auto it = m_stepsContainer.cbegin(); it != m_stepsContainer.cend(); it++) {
+		indent(o);
+		o << stepNb << " " << *it << std::endl;
+		stepNb++;
+	}
+	m_indent--;
 	return o;
 }
