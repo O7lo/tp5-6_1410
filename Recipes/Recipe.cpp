@@ -15,13 +15,15 @@ Recipe::Recipe(std::string title)
 Recipe::Recipe(const Recipe& mdd)
     : AbsIngredient(mdd), m_steps(mdd.m_steps)
 {
-	// À compléter pour copier tous les ingrédients contenus dans la recette
+	for (auto component = mdd.cbegin(); component != mdd.cend(); component++)
+	{
+		addRecipeComponent(*component);
+	}
 }
 
 Recipe* Recipe::clone() const
 {
-	// À compléter pour construire un nouvel objet Recipe en appelant le constructeur de copie
-	return nullptr; // À remplacer
+	return new Recipe(*this);
 }
 
 AbsRecipeComponent& Recipe::addRecipeComponent(const AbsRecipeComponent& member)
@@ -38,18 +40,13 @@ AbsRecipeComponent& Recipe::addIngredient(const AbsRecipeComponent& member)
 
 AbsRecipeComponent& Recipe::addIngredient(const AbsIngredient& ingredient)
 {
-	// À compléter pour construire par clonage une copie de l'objet reçu en paramètre
-	// et l'insérer dans le conteneur des ingrédients. On retourne une référence à l'objet
-	// qui vient d'être inséré dans le conteneur.
-
-	return *this; // À remplacer 
+	m_ingredients.push_back(std::unique_ptr<AbsRecipeComponent>(ingredient.clone()));
+	return *m_ingredients.back();
 }
 
 AbsRecipeComponent& Recipe::addStep(const AbsStep& step)
 {
-	// À compléter pour déléguer aux étapes la tâche d'insérer une copie de l'étape reçue en paramètre.
-	// On retourne une référence à l'objet qui vient d'être inséré dans le conteneur.
-	return *this; // À remplacer 
+	return m_steps.addRecipeComponent(step);
 }
 
 RecipeComponentIterator Recipe::begin(){
@@ -97,27 +94,40 @@ RecipeComponentIterator Recipe::end_step()
 
 void Recipe::deleteRecipeComponent(RecipeComponentIterator_const child)
 {
-	// À compléter pour éliminer de l'ingrédient auquel réfère l'itérateur
+	m_ingredients.erase(child);
 }
 
 void Recipe::deleteIngredient(RecipeComponentIterator_const ingredient)
 {
-	// À compléter pour éliminer tous les ingrédients
+	m_ingredients.erase(ingredient);
 }
 
 void Recipe::deleteStep(RecipeComponentIterator_const step)
 {
-	// À compléter pour déléguer aux étapes la tâche d'effacer l'étape à laquelle réfère l'itérateur.
+	m_steps.deleteRecipeComponent(step);
 }
 
 void Recipe::deleteAllComponents()
 {
-	// À compléter pour éliminer tous les ingrédients et déléguer aux étapes
-	// la tâche d'effacer toutes les étapes.
+	m_ingredients.clear();
+	m_steps.deleteAllComponents();
 }
 
 std::ostream& Recipe::printToStream(std::ostream& o) const 
 {
-	// À compléter pour imprimer sur un stream une recette
+	o << "Recipe: " << m_description << std::endl << "Ingredients: " << std::endl;
+	m_indent++;
+	for (auto it = m_ingredients.cbegin(); it != m_ingredients.cend(); it++) {
+		indent(o);
+		o << *it << std::endl;
+	}
+	m_indent--;
+	o << "Steps:" << std::endl;
+	m_indent++;
+	for (auto it = m_steps.cbegin(); it != m_steps.cend(); it++) {
+		indent(o);
+		o << *it << std::endl;
+	}
+	m_indent--;
 	return o;
 }
