@@ -81,12 +81,12 @@ int CompositeStep::getDuration() const
 
 std::ostream& CompositeStep::printToStream(std::ostream& o) const 
 {
-	o << "Category: " << getDescription() << std::endl;
+	o << getDescription() << std::endl;
 	m_indent++;
 	int stepNb = 1;
 	for (auto it = m_stepsContainer.cbegin(); it != m_stepsContainer.cend(); it++) {
 		indent(o);
-		o << stepNb << " " << *it << std::endl;
+		o << stepNb << " " << *it->get();
 		stepNb++;
 	}
 	m_indent--;

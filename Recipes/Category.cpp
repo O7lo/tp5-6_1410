@@ -84,8 +84,9 @@ std::ostream & Category::printToStream(std::ostream & o) const
 	m_indent++;
 	for (auto it = m_products.cbegin(); it != m_products.cend(); it++) {
 		indent(o);
-		o << *it << std::endl;
+		o << *it->get();
 	}
+	o << std::endl;
 	m_indent--;
 	return o;
 }

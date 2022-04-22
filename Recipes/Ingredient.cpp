@@ -27,7 +27,7 @@ const AbsProduct& Ingredient::getProduct() const
 
 std::ostream& Ingredient::printToStream(std::ostream& o) const 
 {
-	o << m_description << std::endl;
+	o << this->getProduct().getName() << " " << m_description << std::endl;
 	return o;
 }
 

@@ -115,18 +115,23 @@ void Recipe::deleteAllComponents()
 
 std::ostream& Recipe::printToStream(std::ostream& o) const 
 {
-	o << "Recipe: " << m_description << std::endl << "Ingredients: " << std::endl;
+	o << "Recipe: " << m_description << std::endl;
+	indent(o);
+	o << "Ingredients: " << std::endl;
 	m_indent++;
 	for (auto it = m_ingredients.cbegin(); it != m_ingredients.cend(); it++) {
 		indent(o);
-		o << *it << std::endl;
+		o << *it->get();
 	}
 	m_indent--;
+	indent(o);
 	o << "Steps:" << std::endl;
 	m_indent++;
+	int stepNb = 1;
 	for (auto it = m_steps.cbegin(); it != m_steps.cend(); it++) {
 		indent(o);
-		o << *it << std::endl;
+		o << stepNb << " " << *it;
+		stepNb++;
 	}
 	m_indent--;
 	return o;

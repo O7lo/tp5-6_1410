@@ -30,7 +30,7 @@ int WeighedProduct::getQuantity() const
 
 std::ostream & WeighedProduct::printToStream(std::ostream & o) const
 {
-	o << m_name << "(from " << this->getOrigin() << ") " << m_price
+	o << m_name << "(from " << this->getOrigin() << ") $" << m_price
 		<< " (" << m_weight << "g)" << std::endl;
 	return o;
 }
